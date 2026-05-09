@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DripBase — Onchain Tipping</title>
+    <meta
+      name="description"
+      content="Send ETH tips to any wallet on Base with an optional message. Fast, minimal, onchain."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/svg+xml" href="/drip.svg" />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div class="app-container">
+      <!-- ─── Sidebar ─── -->
+      <aside class="sidebar">
+        <div class="sidebar__logo">
+          <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+            <defs>
+              <linearGradient id="logo-g" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#00E5FF"/>
+                <stop offset="100%" stop-color="#00B4D8"/>
+              </linearGradient>
+            </defs>
+            <path d="M50 10 C50 10 20 50 20 65 C20 82 33 95 50 95 C67 95 80 82 80 65 C80 50 50 10 50 10Z" fill="url(#logo-g)"/>
+          </svg>
+          <span class="logo-text">DRIPBASE</span>
+        </div>
+
+        <nav class="sidebar__nav">
+          <a href="#" class="nav-item active" data-target="view-discover">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/></svg>
+            Dashboard
+          </a>
+          <a href="#" class="nav-item" data-target="view-mytips">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            My Tips
+          </a>
+          <a href="#" class="nav-item" data-target="view-leaderboard">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Leaderboard
+          </a>
+        </nav>
+
+        <div class="sidebar__footer">
+          <div class="social-links">
+            <a href="#" class="social-link">X</a>
+            <a href="#" class="social-link">D</a>
+            <a href="#" class="social-link">T</a>
+            <a href="#" class="social-link">M</a>
+          </div>
+        </div>
+      </aside>
+
+      <!-- ─── Main Content ─── -->
+      <div class="main-wrapper">
+        <header class="topbar">
+          <h1 class="topbar__title" id="topbar-title">Dashboard</h1>
+          <div class="topbar__right">
+            <button class="btn-theme-toggle">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            </button>
+            <span class="network-badge hidden" id="network-badge">
+              <span class="network-badge__dot"></span>
+              <span id="network-name">Not Connected</span>
+            </span>
+            <button class="btn btn--connect" id="btn-connect">
+              Connect Wallet
+            </button>
+          </div>
+        </header>
+
+        <main class="dashboard-content">
+          
+          <!-- ─── DISCOVER VIEW ─── -->
+          <div id="view-discover" class="view-section">
+            <!-- Stats Row -->
+            <div class="stats-row" id="stats-bar">
+              <div class="stat-card">
+                <div class="stat-card__icon stat-icon-cyan">💧</div>
+                <div class="stat-card__content">
+                  <span class="stat-card__label">Total Tips</span>
+                  <span class="stat-card__value" id="stat-tips">0</span>
+                </div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card__icon stat-icon-purple">💎</div>
+                <div class="stat-card__content">
+                  <span class="stat-card__label">Volume (ETH)</span>
+                  <span class="stat-card__value" id="stat-volume">0.00</span>
+                </div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card__icon stat-icon-green">👥</div>
+                <div class="stat-card__content">
+                  <span class="stat-card__label">Unique Wallets</span>
+                  <span class="stat-card__value" id="stat-wallets">0</span>
+                </div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card__icon stat-icon-blue">⚡</div>
+                <div class="stat-card__content">
+                  <span class="stat-card__label">Network</span>
+                  <span class="stat-card__value">Base</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Main Grid -->
+            <div class="content-grid">
+              <div class="content-main">
+                <!-- Banner Card -->
+                <div class="banner-card">
+                  <span class="badge">What's new 🚀</span>
+                  <h2>Send ETH micro-tips<br/>onchain instantly</h2>
+                  <button class="btn btn--outline" onclick="document.getElementById('input-recipient').focus()">
+                    Start Tipping <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                  </button>
+                </div>
+
+                <!-- Tip Form Card -->
+                <div class="action-card tip-card" id="tip-card">
+                  <h3>Send a Tip</h3>
+                  <form id="tip-form" autocomplete="off">
+                    <div class="input-group">
+                      <label for="input-recipient" class="input-label">Recipient Address</label>
+                      <input type="text" id="input-recipient" class="input" placeholder="0x... or vitalik.eth" spellcheck="false" required />
+                    </div>
+
+                    <div class="input-row">
+                      <div class="input-group input-group--amount">
+                        <label for="input-amount" class="input-label">Amount (ETH)</label>
+                        <input type="number" id="input-amount" class="input" placeholder="0.001" step="any" min="0" required />
+                      </div>
+                      <div class="input-group input-group--msg">
+                        <label for="input-message" class="input-label">Message <span class="optional">(optional)</span></label>
+                        <input type="text" id="input-message" class="input" placeholder="gm ser 🫡" maxlength="280" />
+                      </div>
+                    </div>
+
+                    <div class="quick-amounts" id="quick-amounts">
+                      <button type="button" class="quick-amount" data-amount="0.001">0.001 ETH</button>
+                      <button type="button" class="quick-amount" data-amount="0.005">0.005 ETH</button>
+                      <button type="button" class="quick-amount" data-amount="0.01">0.01 ETH</button>
+                      <button type="button" class="quick-amount" data-amount="0.05">0.05 ETH</button>
+                    </div>
+
+                    <button type="submit" class="btn btn--send" id="btn-send" disabled>
+                      <span class="btn__label" id="btn-send-label">Connect Wallet to Tip</span>
+                      <span class="btn__spinner hidden" id="btn-spinner"></span>
+                    </button>
+                  </form>
+
+                  <!-- TX Status -->
+                  <div class="tx-status hidden" id="tx-status">
+                    <div class="tx-status__icon" id="tx-icon">✓</div>
+                    <p class="tx-status__text" id="tx-text"></p>
+                    <a class="tx-status__link" id="tx-link" href="#" target="_blank" rel="noopener">View on Basescan ↗</a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Feed Column -->
+              <div class="content-side">
+                <div class="feed-card">
+                  <div class="feed-card__header">
+                    <h3>Recent Tips</h3>
+                    <button class="icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+                  </div>
+                  <p class="feed-subtitle">Live from the blockchain in real-time</p>
+                  <div class="feed" id="feed">
+                    <div class="feed__empty" id="feed-empty">
+                      <span class="feed__empty-icon">📡</span>
+                      <p>Listening for tips…</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- ─── END DISCOVER VIEW ─── -->
+
+          <!-- ─── MY TIPS VIEW ─── -->
+          <div id="view-mytips" class="view-section hidden">
+            <h2 style="margin-bottom: 24px;">My Tip History</h2>
+            <div class="feed-card" style="height: auto;">
+              <div class="feed" id="mytips-feed">
+                <div class="feed__empty" id="mytips-empty">
+                  Connect your wallet to see your history.
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- ─── END MY TIPS VIEW ─── -->
+
+          <!-- ─── LEADERBOARD VIEW ─── -->
+          <div id="view-leaderboard" class="view-section hidden">
+            <h2 style="margin-bottom: 24px;">Top Tippers (Recent)</h2>
+            <div class="feed-card" style="height: auto;">
+              <div class="feed" id="leaderboard-feed">
+                <div class="feed__empty" id="leaderboard-empty">
+                  <span class="feed__empty-icon">🏆</span>
+                  <p>Loading leaderboard from recent blocks…</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- ─── END LEADERBOARD VIEW ─── -->
+
+        </main>
+      </div>
+    </div>
+
+    <!-- ─── Toast ─── -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

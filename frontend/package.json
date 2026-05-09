@@ -1,0 +1,21 @@
+{
+  "name": "dripbase-frontend",
+  "version": "1.0.0",
+  "description": "Frontend for the DripBase onchain tipping system",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^6.3.0"
+  },
+  "dependencies": {
+    "@rainbow-me/rainbowkit": "^2.2.11",
+    "ethers": "^6.13.0",
+    "viem": "^2.48.11",
+    "wagmi": "^3.6.11"
+  }
+}
